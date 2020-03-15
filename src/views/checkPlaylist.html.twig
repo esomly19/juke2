@@ -1,0 +1,57 @@
+  {% include 'layout.html.twig' %}
+  {% block stylesheets %}
+      <link rel="stylesheet" href="src/views/css/playllist.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        {% endblock %}
+
+<div class="conatiner">
+<div class="wrap">
+
+  {% for playlist2 in playlist2 %}
+ 	<div class="boxtwo"> <a href="{{ path_for('playlist', { 'id': playlist.id }) }}" style="text-decoration:none;"> <img class="iamge2" src="{{playlist2.image_playlist}}"   alt="Pas d'image disponible, nous sommes désolé"/>
+
+ <h1>  {{playlist2.nom}}</h1>	<div class="poster p1">
+    <p> {{playlist2.auteur}} </br>
+  {{playlist2.description}}</p>
+     <a href="{{ path_for('updatePlaylist', { 'id': playlist2.id }) }}">modifierplaylist</a>
+			
+		</div></a>
+</div>
+  {% endfor %}
+</div></div>
+<div class="conatiner">
+<div class="wrap">
+
+  {% for playlist in playlist %}
+
+
+ 	<div class="box one">
+
+<a href="{{ path_for('playlist', { 'id': playlist.id }) }}" style="text-decoration:none;">
+  <img class="iamge" src="{{playlist.image_playlist}}"   alt="Pas d'image disponible, nous sommes désolé"/></a>
+  <h1>  {{playlist.nom}}</h1>
+	<div class="poster p1">
+    <p> {{playlist.auteur}} </br>
+  {{playlist.description}}</p>
+     <a href="{{ path_for('updatePlaylist', { 'id': playlist.id }) }}">modifierplaylist</a>
+			
+		</div>
+    
+
+</div>
+
+
+
+   {% endfor %}
+
+	
+</div>
+</div>
+
+
+{% block script %}
+
+
+{% endblock %}

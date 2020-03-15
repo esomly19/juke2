@@ -1,0 +1,157 @@
+{% extends 'layout.html.twig' %}
+{% block script %}
+{# <script>
+function musiqueInformation(element){
+    $.ajax({
+                url: "https://jukebox-admin.herokuapp.com/getMusic",
+                method: 'GET',
+                headers: {
+                    "Musicname":element.titre
+                }
+                }).then(function(data) {
+    let jData = JSON.parse(data);
+    var minutes = Math.floor(jData.Duree / 60);
+    var seconds = jData.Duree - minutes * 60;
+
+    let content =`
+        <div class="card col-sm-2" titreMusic="${jData.titre}" >
+        
+            <div id="image img-fluid img-thumbnail">
+            <img  src="${jData.Cover_album_medium}" alt="#">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${jData.titre}</h5>
+                <h5 class="card-text">${jData.Auteur}</h5>
+                <h5 class="card-text">${jData.titre}</h5>
+                <input type="checkbox" name="id_musique[{{i}}]" value="{{musique.id}}"/><label>selectionne</label>
+            </div>
+        </div>
+    `;
+    let e = document.createElement("div");
+    e = document.setAttribute("class","card col-sm-2");
+    e = document.setAttribute("titreMusic",$jData.titre);
+
+    e.innerHTML=content;
+    document.getElementById("CatalogueMusic").appendChild(e);
+    });
+
+            
+ 
+}
+</script> #}
+    <script src="/src/script/OpenFormulaire.js"></script>
+    <script src="/src/script/FiltrerMusique.js"></script>
+    <script src="/src/script/CreerModifierPlaylist.js"></script>
+{% endblock %}
+
+{% block content %}
+<h3>c'est ici qu'on va crée des playlist</h3>
+
+<p data-placement="top" data-toggle="tooltip" title="form"><button class="btn btn-danger btn-s" data-title="form" data-toggle="modal" data-target="#form" ><img src="/src/views/img/edit.png" class="img-thumbnail"></button></p>
+
+
+<div>
+
+        <button class="filterButton" id="All"> Show all</button>
+
+
+        <label for="filterGenre">Genres : </label>
+        <select name="filterGenre" class="filterListe" id="genreMusic">
+
+            <option value="country"> Country </option>
+            <option value="rock"> Rock </option>
+            <option value="metal"> Metal </option>
+            <option value="pop"> Pop </option>
+
+        </select>
+
+    </div>
+
+    <div class="rechercheBar">
+        <input type=text  id="rechercheChamp" placeholder="titre, artiste, genre..."></input>
+        <button type=submit id="rechercheButton">Rechercher</button>
+    </div>
+    
+    {% set selectmusic = [] %}
+
+    {% set i = 0 %}
+
+<form action="/createPlaylist" method="POST">
+<div class="row" id="CatalogueMusic">
+        
+    {% for musique in musiques %}
+
+    <div class="card col-sm-2" titreMusic="{{ musique.titre }}" >
+    {# artisteMusic="{{ musique.artiste }}" descriptionMusic="{{ musique.description }}" genreMusic="{{ musique.genre }}" #}
+    
+        {# <div id="image img-fluid img-thumbnail">
+         <img  src="#" alt="#">
+        </div> #}
+        <div class="card-body">
+            <h5 class="card-title"> {{ musique.titre }} </h5>
+            {# <h5> {{ musique.artiste }} </h5>
+            <div>{{ musique.genre }}</div> #}
+            <input type="checkbox" name="id_musique[{{i}}]" value="{{musique.id}}"/><label>selectionne</label>
+            {# {% set selectmusic = selectmusic|merge([musique]) %} #}
+        </div>
+    </div>
+
+    {% set i = i+1 %}
+
+    {% endfor %}
+</div>
+
+
+<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                <h4 class="modal-title custom_align" id="Heading">Info playlist</h4>
+            </div>
+            
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Nom de la playlist</label>
+                        <input type="text" name="nom" id="nom" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description de la playlist</label>
+                        <input type="text" name="description" id="description">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Créateur de la playlist</label>
+                        <input type="text" name="auteur" id="auteur" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>adresse de l'image</label>
+                        <input type="text" name="image_playlist" id="image_playlist">
+                    </div>
+                    {# {% set i = 0 %} #}
+                    {# {% for select in selectmusic %} #}
+
+                    
+                    {# <h5> {{ select.titre }} </h5> #}
+                    
+                    {# <input name="id_musique[{{i}}]" value="{{select.id}}"> #}
+
+                    {# {% set i = i+1 %} #}
+                    
+                    {# {% endfor %} #}
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning" ><span class="glyphicon glyphicon-ok-sign"></span>Finir</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Retour</button>
+                </div>
+            </form>
+        </div>  <!-- /.modal-content --> 
+    </div> <!-- /.modal-dialog --> 
+</div>
+
+{% endblock %}
+
